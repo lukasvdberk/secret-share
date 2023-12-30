@@ -12,7 +12,7 @@ export async function createSecret(
   secretValue: string,
   secretDomain: string,
 ): Promise<string> {
-    const dynomoDb = await connectToDynamoDb();
+    const dynamoDb = await connectToDynamoDb();
     const secretId = generateUUID();
     const createSecret: Secret = {
         id: secretId,
@@ -25,7 +25,7 @@ export async function createSecret(
             ...createSecret,
         },
     })
-    await dynomoDb.send(dynamoSecretPut);
+    await dynamoDb.send(dynamoSecretPut);
 
     return `${secretDomain}${secretId}`;
 }

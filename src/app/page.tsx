@@ -20,14 +20,10 @@ export default function CreateSecret(
 
   async function createSecretFromForm(formData: FormData) {
       'use server'
-      // TODO set correctly
-
       const secret = formData.get('secret') as string
-      console.log(secret)
       if(!secret) return
 
-      // const secretUrl = await createSecret(secret, domainPath)
-      const secretUrl = '123'
+      const secretUrl = await createSecret(secret, domainPath)
 
       const queryParamsToUpdate = new URLSearchParams()
       queryParamsToUpdate.set('secret', secretUrl)
@@ -35,7 +31,6 @@ export default function CreateSecret(
       // redirect user to the same page with the new query params
       const redirectUrl = domainPath + '?' + queryParamsToUpdate.toString()
 
-      console.log(redirectUrl)
       redirect(redirectUrl)
   }
 
