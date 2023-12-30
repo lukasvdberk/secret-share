@@ -1,8 +1,8 @@
 import {connectToDynamoDb} from "@/services/utils/dynamo-db";
 import {Secret} from "@/models/secret.model";
 import {PutCommand} from "@aws-sdk/lib-dynamodb";
+import {secretTable} from "@/services/secrets-table";
 
-const secretTable = 'secrets';
 
 /**
  * Creates a secret and returns the secret url that can be access one time
@@ -27,7 +27,7 @@ export async function createSecret(
     })
     await dynamoDb.send(dynamoSecretPut);
 
-    return `${secretDomain}${secretId}`;
+    return `${secretDomain}/secrets/${secretId}`;
 }
 
 // Function to generate a unique identifier (UUID) using the secret value

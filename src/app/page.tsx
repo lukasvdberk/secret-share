@@ -1,6 +1,9 @@
 import Image from 'next/image'
 import {createSecret} from "@/services/create-secret";
 import {redirect, usePathname, useSearchParams} from "next/navigation";
+import React, {useCallback} from "react";
+import Link from "next/link";
+import {CopyClipboardComponent} from "@/components/copy-clipboard.component";
 
 export default function CreateSecret(
     {
@@ -12,11 +15,10 @@ export default function CreateSecret(
     }
 ) {
   let generateSecretUrl = '';
-  const domainPath = 'http://localhost:3000/';
+  const domainPath = 'http://localhost:3000';
   if(searchParams) {
       generateSecretUrl = searchParams['secret'] as string;
   }
-
 
   async function createSecretFromForm(formData: FormData) {
       'use server'
@@ -41,7 +43,8 @@ export default function CreateSecret(
         <textarea name="secret"></textarea>
         <button type="submit">Create secret</button>
       </form>
-      <span>{generateSecretUrl}</span>
+      <Link href={generateSecretUrl} />
+      <CopyClipboardComponent generateSecretUrl={generateSecretUrl} />
     </main>
   )
 }
