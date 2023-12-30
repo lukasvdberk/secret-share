@@ -3,7 +3,11 @@ services:
  dynamodb-local:
    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
    image: "amazon/dynamodb-local:latest"
-   container_name: dynamodb-local
+   environment:
+      - DYNAMODB_PORT=8000
+      - DYNAMODB_ENDPOINT=http://localhost:8000
+   env_file:
+     - .env
    ports:
      - "8000:8000"
    volumes:
