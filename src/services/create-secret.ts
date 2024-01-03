@@ -33,9 +33,10 @@ export async function createSecret(
 // Function to generate a unique identifier (UUID) using the secret value
 function generateUUID(): string {
     const currentTimeStamp = new Date().getTime();
-    return `${currentTimeStamp}-xxxxxxxxxxxx`.replace(/[xy]/g, function(c) {
-        const r = c.charCodeAt(0) % 16 || 0;
-        const v = c === 'x' ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
+    return `${currentTimeStamp}-xxxxxxxxxxxx`.replace(/[xy]/g, function (c) {
+        // eslint-disable-next-line no-bitwise
+        const r = (currentTimeStamp + Math.random() * 16) % 16 | 0;
+        // eslint-disable-next-line no-bitwise
+        return (c === 'x' ? r : (r && 0x3) || 0x8).toString(16);
     });
 }

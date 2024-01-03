@@ -2,8 +2,8 @@ import Image from 'next/image'
 import {createSecret} from "@/services/create-secret";
 import {redirect, usePathname, useSearchParams} from "next/navigation";
 import React, {useCallback} from "react";
-import Link from "next/link";
 import {CopyClipboardComponent} from "@/components/copy-clipboard.component";
+import Link from "next/link";
 
 export default function CreateSecret(
     {
@@ -15,9 +15,10 @@ export default function CreateSecret(
     }
 ) {
   let generateSecretUrl = '';
+  // TODO set dynamically
   const domainPath = 'http://localhost:3000';
   if(searchParams) {
-      generateSecretUrl = searchParams['secret'] as string;
+      generateSecretUrl = searchParams['secretLink'] as string || ''
   }
 
   async function createSecretFromForm(formData: FormData) {
@@ -28,7 +29,7 @@ export default function CreateSecret(
       const secretUrl = await createSecret(secret, domainPath)
 
       const queryParamsToUpdate = new URLSearchParams()
-      queryParamsToUpdate.set('secret', secretUrl)
+      queryParamsToUpdate.set('secretLink', secretUrl)
 
       // redirect user to the same page with the new query params
       const redirectUrl = domainPath + '?' + queryParamsToUpdate.toString()
@@ -37,14 +38,30 @@ export default function CreateSecret(
   }
 
   return (
-    <main>
-      <h1>Share a one time secret</h1>
-      <form action={createSecretFromForm}>
-        <textarea name="secret"></textarea>
-        <button type="submit">Create secret</button>
-      </form>
-      <Link href={generateSecretUrl} />
-      <CopyClipboardComponent generateSecretUrl={generateSecretUrl} />
-    </main>
+      <main className="flex items-center justify-center">
+        <div className="bg-white shadow-md rounded-lg p-8 max-w-lg my-10">
+              { generateSecretUrl &&
+                <>
+                    <Link href={generateSecretUrl} />
+                    <CopyClipboardComponent generateSecretUrl={generateSecretUrl} />
+                </>
+              }
+              <h1 className="text-2xl font-semibold mb-2">Paste a password, secret message or private link below.</h1>
+              <form action={createSecretFromForm}>
+                <p className="mb-4 text-gray-600">Keep sensitive info out of your email and chat logs.</p>
+                <input
+                  name="secret"
+                  type="text"
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 mb-4"
+                  placeholder="s6BsAf#d87^g2j^hK*65"
+                />
+                <button
+                  type="submit"
+                  className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 px-4 py-2 w-full bg-[#e53e3e] text-white mb-4">
+                  Create a secret link
+                </button>
+              </form>
+        </div>
+      </main>
   )
 }
