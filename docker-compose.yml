@@ -1,6 +1,14 @@
 version: '3.8'
 services:
- dynamodb-local:
+ app:
+   build:
+     context: .
+     dockerfile: Dockerfile
+   ports:
+      - "3005:3000"
+   env_file:
+     - .env
+ dynamodb:
    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
    image: "amazon/dynamodb-local:latest"
    environment:

@@ -15,14 +15,13 @@ export default function CreateSecret(
     }
 ) {
   let generateSecretUrl = '';
-  // TODO set dynamically
-  const domainPath = 'http://localhost:3000';
   if(searchParams) {
       generateSecretUrl = searchParams['secretLink'] as string || ''
   }
 
   async function createSecretFromForm(formData: FormData) {
       'use server'
+      const domainPath = process.env.DOMAIN as string;
       const secret = formData.get('secret') as string
       if(!secret) return
 
