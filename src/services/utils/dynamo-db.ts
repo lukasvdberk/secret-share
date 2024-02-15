@@ -42,11 +42,9 @@ export async function connectToDynamoDb() {
                 },
                 {
                     "AttributeName": "secretValue",
-                    "KeyType": "STRING"
                 },
                 {
                     "AttributeName": "hasBeenRead",
-                    "KeyType": "BOOL"
                 }
             ],
             TableName: secretTable
